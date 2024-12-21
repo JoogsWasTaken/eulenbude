@@ -1,0 +1,36 @@
+{{ $pageTitle := site.Title }}
+{{ if not .IsHome }}
+  {{ $pageTitle = printf "%s | %s" .Title site.Title }}
+{{ end }}
+{{ $pageDescription := "" }}
+{{- with or .Description .Summary site.Params.description | plainify | htmlUnescape }}
+  {{ $pageDescription = trim . "\n\r\t" }}
+{{- end }}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+<title>{{ $pageTitle }}</title>
+<link
+  rel="icon"
+  type="image/png"
+  href="{{ "favicon-96x96.png" | absURL }}"
+  sizes="96x96"
+/>
+<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | absURL }}" />
+<link rel="shortcut icon" href="{{ "favicon.ico" | absURL }}" />
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="{{ "apple-touch-icon.png" | absURL }}"
+/>
+<meta name="apple-mobile-web-app-title" content="{{ site.Title }}" />
+<link rel="manifest" href="{{ "site.webmanifest" | absURL }}" />
+<meta property="og:title" content="{{ $pageTitle }}" />
+<meta property="og:description" content="{{ $pageDescription }}" />
+<meta property="og:url" content="{{ .Permalink }}" />
+<link rel="stylesheet" href="{{ "css/termeul.css" | absURL }}" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="{{ $pageTitle }}" />
+<meta name="twitter:description" content="{{ $pageDescription }}" />
+{{- with or .Params.tags site.Params.tags }}
+  <meta name="keywords" content="{{ delimit . ", " }}" />
+{{- end }}

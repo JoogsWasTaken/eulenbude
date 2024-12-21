@@ -1,0 +1,21 @@
+baseURL = 'https://eulenbu.de/'
+languageCode = 'en-us'
+title = 'Eulenbude'
+theme = 'termeul'
+disableKinds = ["taxonomy", "term"]
+
+[params]
+tags = ["cybersec", "cybersecurity", "dev", "development", "sysadmin", "system administration", "blog", "tech", "technology"]
+
+[[menus.main]]
+name = 'Posts'
+pageRef = '/posts'
+weight = 10
+
+[[menus.main]]
+name = 'Termeul'
+pageRef = '/termeul'
+weight = 20
+
+[markup.goldmark.renderer]
+unsafe = true

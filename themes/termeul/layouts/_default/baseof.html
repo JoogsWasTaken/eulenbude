@@ -1,0 +1,37 @@
+<!doctype html>
+<html
+  lang="{{ site.Language.LanguageCode }}"
+  dir="{{ or site.Language.LanguageDirection `ltr` }}"
+>
+  <head>
+    {{ partial "head.html" . }}
+  </head>
+  <body>
+    <div class="bg">
+      <div class="bg-layer bg-layer-back"></div>
+      <div class="bg-layer bg-layer-front"></div>
+      <div class="bg-layer bg-layer-overlay"></div>
+    </div>
+    <div class="page">
+      <header class="page-header">
+        {{ partial "header.html" . }}
+      </header>
+      <main class="page-main">
+        {{ block "main" . }}{{ end }}
+      </main>
+      <footer class="page-footer">
+        {{ partial "footer.html" . }}
+      </footer>
+      <div class="owl-container">
+        <div class="owl">
+          <input type="button" class="owl-btn" value="" />
+          <div class="owl-counter">
+            &hearts; &times; <span class="owl-counter-value">1,337</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{{ "js/background.js" | absURL }}"></script>
+    <script src="{{ "js/owl.js" | absURL }}"></script>
+  </body>
+</html>

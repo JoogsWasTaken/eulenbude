@@ -1,0 +1,70 @@
+name: Build and deploy website
+
+env:
+  BUILD_BRANCH_NAME: deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.139.5
+      HUGO_TZ: Europe/Berlin
+    steps:
+      - name: Install Hugo
+        shell: bash
+        run: |
+          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb
+          sudo dpkg -i ${{ runner.temp }}/hugo.deb
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: Build with Hugo
+        env:
+          HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
+          HUGO_ENVIRONMENT: production
+          TZ: ${{ env.HUGO_TZ }}
+        run: |
+          hugo --gc --minify
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-public
+          path: public/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout existing branch
+        uses: actions/checkout@v4
+        id: checkout-existing
+        continue-on-error: true
+        with:
+          ref: ${{ env.BUILD_BRANCH_NAME }}
+      - name: Default checkout
+        uses: actions/checkout@v4
+        if: steps.checkout-existing.outcome == 'failure'
+      - name: Setup repository
+        shell: bash
+        run: |
+          git checkout ${{ env.BUILD_BRANCH_NAME }} 2>/dev/null || git checkout --orphan ${{ env.BUILD_BRANCH_NAME }}
+          git config user.name "${{ github.actor || 'Push To Branch Action' }}"
+          git config user.email "${{ github.actor || 'push-to-branch-action' }}@users.noreply.github.com"
+          git rm -rf '*'
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-public
+      - name: Push to remote
+        shell: bash
+        run: |
+          git add --all .
+          git commit --no-verify -m "Deploying from @ ${{ github.sha }}" && git push -u origin ${{ env.BUILD_BRANCH_NAME }} || true
