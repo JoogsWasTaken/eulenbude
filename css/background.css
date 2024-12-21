@@ -1,0 +1,53 @@
+.bg {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  background: var(--color-bg-gradient-dark);
+  background: radial-gradient(
+    at right bottom,
+    var(--color-bg-gradient-dark),
+    var(--color-bg-gradient-light)
+  );
+}
+
+.bg .bg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-position-y: 0px;
+  transition: background-position-y 0s linear; /* offload to gpu */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg .bg-layer {
+    transition: none !important;
+  }
+}
+
+.bg .bg-layer-back {
+  background-image: url("/img/bg-stars.png");
+  background-size: 1024px;
+  image-rendering: pixelated;
+  background-position-x: -256px;
+  opacity: 0.4;
+}
+
+.bg .bg-layer-front {
+  background-image: url("/img/bg-stars.png");
+  background-size: 2048px;
+  image-rendering: pixelated;
+  background-position-x: -128px;
+  opacity: 0.8;
+}
+
+.bg .bg-layer-overlay {
+  background: linear-gradient(
+    var(--color-bg-overlay-light),
+    var(--color-bg-overlay-dark)
+  );
+}

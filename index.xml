@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Eulenbude</title><link>https://eulenbu.de/</link><description>Recent content on Eulenbude</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 02 Nov 2023 12:23:01 +0100</lastBuildDate><atom:link href="https://eulenbu.de/index.xml" rel="self" type="application/rss+xml"/><item><title>Becoming one in a million by giving up your data</title><link>https://eulenbu.de/posts/bf-ncvr/</link><pubDate>Thu, 02 Nov 2023 12:23:01 +0100</pubDate><guid>https://eulenbu.de/posts/bf-ncvr/</guid><description>&lt;blockquote>
+&lt;p>This post is part of a series on Bloom filter based privacy-preserving record linkage.
+If you&amp;rsquo;re new to this series, then I highly recommend you read the first post as a primer on what you&amp;rsquo;re getting yourself into.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-pprl-intro/">Find duplicates in your datasets with this one weird data structure&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-pprl-attacks/">You show me your bits, I show you who you are&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-popcnt/">How to count bits at the speed of light&lt;/a>&lt;/li>
+&lt;li>&lt;strong>&lt;a href="https://eulenbu.de/posts/bf-ncvr/">Becoming one in a million by giving up your data&lt;/a>&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;p>So far, all posts that dealt with niche aspects of my master thesis were all about the methods of privacy-preserving record linkage (PPRL), the attacks one can run on them and some interesting software engineering bits here and there.
+However I spent very little time covering what makes data linkable in the first place.&lt;/p></description></item><item><title>How to count bits at the speed of light</title><link>https://eulenbu.de/posts/bf-popcnt/</link><pubDate>Wed, 08 Feb 2023 21:46:14 +0100</pubDate><guid>https://eulenbu.de/posts/bf-popcnt/</guid><description>&lt;blockquote>
+&lt;p>This post is part of a series on Bloom filter based privacy-preserving record linkage.
+If you&amp;rsquo;re new to this series, then I highly recommend you read the first post as a primer on what you&amp;rsquo;re getting yourself into.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-pprl-intro/">Find duplicates in your datasets with this one weird data structure&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-pprl-attacks/">You show me your bits, I show you who you are&lt;/a>&lt;/li>
+&lt;li>&lt;strong>&lt;a href="https://eulenbu.de/posts/bf-popcnt/">How to count bits at the speed of light&lt;/a>&lt;/strong>&lt;/li>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-ncvr/">Becoming one in a million by giving up your data&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;p>I&amp;rsquo;ve been talking about Bloom filters a lot in my series about my master thesis.
+This time, I want to go one step deeper.
+Bloom filters operate on bitsets which, in turn, are represented as arrays of 64-bit unsigned integers&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> in memory.
+An operation that has to be executed a lot in the field of record linkage with Bloom filters is to count the amount of set bits in the underlying bitset.
+This operation is also called computing the &amp;ldquo;Hamming weight&amp;rdquo;, &amp;ldquo;population count&amp;rdquo; or &amp;ldquo;popcount&amp;rdquo; depending on who you ask.
+If you ask me, I prefer &amp;ldquo;popcount&amp;rdquo; because it&amp;rsquo;s short and snappy, so that&amp;rsquo;s what I&amp;rsquo;m going to call it from this point forward.&lt;/p></description></item><item><title>You show me your bits, I show you who you are</title><link>https://eulenbu.de/posts/bf-pprl-attacks/</link><pubDate>Sun, 11 Dec 2022 20:36:02 +0100</pubDate><guid>https://eulenbu.de/posts/bf-pprl-attacks/</guid><description>&lt;blockquote>
+&lt;p>This post is part of a series on Bloom filter based privacy-preserving record linkage.
+If you&amp;rsquo;re new to this series, then I highly recommend you read the first post as a primer on what you&amp;rsquo;re getting yourself into.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-pprl-intro/">Find duplicates in your datasets with this one weird data structure&lt;/a>&lt;/li>
+&lt;li>&lt;strong>&lt;a href="https://eulenbu.de/posts/bf-pprl-attacks/">You show me your bits, I show you who you are&lt;/a>&lt;/strong>&lt;/li>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-popcnt/">How to count bits at the speed of light&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-ncvr/">Becoming one in a million by giving up your data&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;p>&lt;a href="https://eulenbu.de/posts/bf-pprl-intro/">In my previous post in this series&lt;/a>, I gave an overview of how Bloom filters are applied in &lt;strong>privacy-preserving record linkage&lt;/strong>, or PPRL for short.
+Bloom filters obscure the data that is inserted into them while preserving the similarity between nearly identical data records.
+They do this by running input data through one or multiple hash functions.
+The hash digests are then used to determine the indices of bits to set in the Bloom filter.
+If all of this flew over your head, then I highly recommend you give the previous post a read first.
+Understanding the basics is key to digging deeper into the potential weaknesses that Bloom filters present in record linkage scenarios.&lt;/p></description></item><item><title>Find duplicates in your datasets with this one weird data structure</title><link>https://eulenbu.de/posts/bf-pprl-intro/</link><pubDate>Sat, 29 Oct 2022 15:43:12 +0200</pubDate><guid>https://eulenbu.de/posts/bf-pprl-intro/</guid><description>&lt;blockquote>
+&lt;p>This post is part of a series on Bloom filter based privacy-preserving record linkage.
+If you&amp;rsquo;re new to this series, then I highly recommend you read this post first as a primer on what you&amp;rsquo;re getting yourself into.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>&lt;a href="https://eulenbu.de/posts/bf-pprl-intro/">Find duplicates in your datasets with this one weird data structure&lt;/a>&lt;/strong>&lt;/li>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-pprl-attacks/">You show me your bits, I show you who you are&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-popcnt/">How to count bits at the speed of light&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://eulenbu.de/posts/bf-ncvr/">Becoming one in a million by giving up your data&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;p>Let&amp;rsquo;s consider the following scenario that is definitely not taken from any real-life events.
+A person is admitted to a hospital with a suspected flu.
+Upon closer inspection though, none of the symptoms seem to line up with known strains of influenza.
+Similar observations are reported by other hospitals over the following days.
+This prompts the doctors in charge to send swabs taken from affected patients to nearby virology laboratories.&lt;/p></description></item><item><title>Unveiling Steam's browser login method (for real this time)</title><link>https://eulenbu.de/posts/re-steam-login/</link><pubDate>Tue, 30 Mar 2021 12:43:01 +0000</pubDate><guid>https://eulenbu.de/posts/re-steam-login/</guid><description>&lt;p>I&amp;rsquo;m assuming that you, dear reader, have already read &lt;a href="https://eulenbu.de/posts/steam-login/">my previous post on Steam&amp;rsquo;s browser login mechanism&lt;/a>.
+I won&amp;rsquo;t be repeating information that I already provided back then.
+Instead, I want to dig deeper and find out what exactly the purpose of Steam encrypting their users&amp;rsquo; passwords in the browser is.
+All this is based on the countless suggestions I received since then (which I&amp;rsquo;m eternally thankful for!) and my own research that I have done since then.&lt;/p></description></item><item><title>Modifying Telegram's "People Nearby" feature to pinpoint people's homes</title><link>https://eulenbu.de/posts/tg-nearby/</link><pubDate>Fri, 05 Feb 2021 13:03:01 +0100</pubDate><guid>https://eulenbu.de/posts/tg-nearby/</guid><description>&lt;p>One morning I woke up and found that Telegram implemented a new feature called &amp;ldquo;People Nearby&amp;rdquo;.
+If you choose to share your location publicly on Telegram, you&amp;rsquo;ll appear in a list for users who are physically close to you.
+Not only that, but they&amp;rsquo;ll also see just how far away you are down to the meter.
+However, you don&amp;rsquo;t need to share your own location in order to see where people around you are located.
+These are perfect prerequisites to find out just how accurate this feature really is and, more importantly, whether or not it can be used to find out where nearby Telegram users live.&lt;/p></description></item><item><title>Steam's login method is kinda interesting</title><link>https://eulenbu.de/posts/steam-login/</link><pubDate>Thu, 07 Jan 2021 15:37:01 +0100</pubDate><guid>https://eulenbu.de/posts/steam-login/</guid><description>&lt;p>I found a StackOverflow question from 2013 &lt;a href="https://stackoverflow.com/questions/1582894/how-to-send-password-securely-over-http">asking how to securely send a password over HTTP&lt;/a>. The answers are pretty unanimous: get a SSL certificate. Here&amp;rsquo;s an experiment: set up your favorite traffic-capturing proxy, browse to a service you frequently use, log in with your account (or preferably a throwaway), and inspect the requests. You will most certainly find that your username and password are sent as-is in a HTTP request body. The only reason this works is because your connection to the server is encrypted using TLS.&lt;/p></description></item><item><title>School web app development: five years later</title><link>https://eulenbu.de/posts/vpmobil/</link><pubDate>Sat, 02 Jan 2021 13:41:32 +0100</pubDate><guid>https://eulenbu.de/posts/vpmobil/</guid><description>&lt;p>Digitization in Germany is &amp;hellip; a difficult topic. It&amp;rsquo;s subject to heated debates and the tedious &amp;ldquo;well we&amp;rsquo;ve been doing it like this for ages now, so why change it&amp;rdquo; argument. So back in my school, the most reliable way to catch up with the newest and coolest substitutions was (and still is last time I checked) a single cabinet in the main hall which contained printouts of the most up-to-date school-related information. Of course, you could also acquire this information on the school&amp;rsquo;s homepage, but only after logging in, accessing the &amp;ldquo;internal&amp;rdquo; segment and clicking through a myriad of links to find out when you get to hang out with the cool substitute teacher.&lt;/p></description></item></channel></rss>

@@ -1,0 +1,193 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width"><title>How to count bits at the speed of light | Eulenbude</title>
+<link rel=icon type=image/png href=https://eulenbu.de/favicon-96x96.png sizes=96x96><link rel=icon type=image/svg+xml href=https://eulenbu.de/favicon.svg><link rel="shortcut icon" href=https://eulenbu.de/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=https://eulenbu.de/apple-touch-icon.png><meta name=apple-mobile-web-app-title content="Eulenbude"><link rel=manifest href=https://eulenbu.de/site.webmanifest><meta property="og:title" content="How to count bits at the speed of light | Eulenbude"><meta property="og:description" content='I&#39;ve been talking about Bloom filters a lot in my series about my master thesis. This time, I want to go one step deeper. Bloom filters operate on bitsets which, in turn, are represented as arrays of 64-bit unsigned integers in memory. An operation that has to be executed a lot in the field of record linkage with Bloom filters is to count the amount of set bits in the underlying bitset. This operation is also called computing the "Hamming weight", "population count" or "popcount" depending on who you ask. If you ask me, I prefer "popcount" because it&#39;s short and snappy, so that&#39;s what I&#39;m going to call it from this point forward.'><meta property="og:url" content="https://eulenbu.de/posts/bf-popcnt/"><link rel=stylesheet href=https://eulenbu.de/css/termeul.css><meta name=twitter:card content="summary"><meta name=twitter:title content="How to count bits at the speed of light | Eulenbude"><meta name=twitter:description content='I&#39;ve been talking about Bloom filters a lot in my series about my master thesis. This time, I want to go one step deeper. Bloom filters operate on bitsets which, in turn, are represented as arrays of 64-bit unsigned integers in memory. An operation that has to be executed a lot in the field of record linkage with Bloom filters is to count the amount of set bits in the underlying bitset. This operation is also called computing the "Hamming weight", "population count" or "popcount" depending on who you ask. If you ask me, I prefer "popcount" because it&#39;s short and snappy, so that&#39;s what I&#39;m going to call it from this point forward.'><meta name=keywords content="compsci,programming,pprl,bitwise,binary,memory,computer,popcnt,popcount,hamming,weight,data structure,computer science,bitset,bits,magic,magic number"></head><body><div class=bg><div class="bg-layer bg-layer-back"></div><div class="bg-layer bg-layer-front"></div><div class="bg-layer bg-layer-overlay"></div></div><div class=page><header class=page-header><nav class="nav main-nav"><ul><li class=nomarker><h1 class=page-logo><a href=https://eulenbu.de/>Eulenbude</a></h1></li><li><a href=https://eulenbu.de/posts>Posts</a></li><li><a href=https://eulenbu.de/termeul>Termeul</a></li></ul></nav></header><main class=page-main><h1>How to count bits at the speed of light</h1><p class=post-date>Published on
+<time datetime=$creationDateMachine>2023-02-08</time></p><blockquote><p>This post is part of a series on Bloom filter based privacy-preserving record linkage.
+If you&rsquo;re new to this series, then I highly recommend you read the first post as a primer on what you&rsquo;re getting yourself into.</p><ul><li><a href=https://eulenbu.de/posts/bf-pprl-intro/>Find duplicates in your datasets with this one weird data structure</a></li><li><a href=https://eulenbu.de/posts/bf-pprl-attacks/>You show me your bits, I show you who you are</a></li><li><strong><a href=https://eulenbu.de/posts/bf-popcnt/>How to count bits at the speed of light</a></strong></li><li><a href=https://eulenbu.de/posts/bf-ncvr/>Becoming one in a million by giving up your data</a></li></ul></blockquote><p>I&rsquo;ve been talking about Bloom filters a lot in my series about my master thesis.
+This time, I want to go one step deeper.
+Bloom filters operate on bitsets which, in turn, are represented as arrays of 64-bit unsigned integers<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup> in memory.
+An operation that has to be executed a lot in the field of record linkage with Bloom filters is to count the amount of set bits in the underlying bitset.
+This operation is also called computing the &ldquo;Hamming weight&rdquo;, &ldquo;population count&rdquo; or &ldquo;popcount&rdquo; depending on who you ask.
+If you ask me, I prefer &ldquo;popcount&rdquo; because it&rsquo;s short and snappy, so that&rsquo;s what I&rsquo;m going to call it from this point forward.</p><p>Most of the code for my master thesis is written in Java (sigh), so I eventually began to wonder just how popcount is implemented.
+With how many times this operation has to be carried out, there surely must be some trick to make it run super fast, right?
+So I looked into the <a href=https://github.com/openjdk/jdk/blob/6475501a01268f5c35a9bf30f4104ce7a40d8181/src/java.base/share/classes/java/lang/Long.java#L1835>Long class</a> &mdash; Java&rsquo;s &ldquo;object class representation&rdquo; of 64-bit integers &mdash; inside the OpenJDK source code and &mldr;</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>bitCount</span>(<span style=color:#66d9ef>long</span> i) {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// HD, Figure 5-2</span>
+</span></span><span style=display:flex><span>	i <span style=color:#f92672>=</span> i <span style=color:#f92672>-</span> ((i <span style=color:#f92672>&gt;&gt;&gt;</span> 1) <span style=color:#f92672>&amp;</span> 0x5555555555555555L);
+</span></span><span style=display:flex><span>	i <span style=color:#f92672>=</span> (i <span style=color:#f92672>&amp;</span> 0x3333333333333333L) <span style=color:#f92672>+</span> ((i <span style=color:#f92672>&gt;&gt;&gt;</span> 2) <span style=color:#f92672>&amp;</span> 0x3333333333333333L);
+</span></span><span style=display:flex><span>	i <span style=color:#f92672>=</span> (i <span style=color:#f92672>+</span> (i <span style=color:#f92672>&gt;&gt;&gt;</span> 4)) <span style=color:#f92672>&amp;</span> 0x0f0f0f0f0f0f0f0fL;
+</span></span><span style=display:flex><span>	i <span style=color:#f92672>=</span> i <span style=color:#f92672>+</span> (i <span style=color:#f92672>&gt;&gt;&gt;</span> 8);
+</span></span><span style=display:flex><span>	i <span style=color:#f92672>=</span> i <span style=color:#f92672>+</span> (i <span style=color:#f92672>&gt;&gt;&gt;</span> 16);
+</span></span><span style=display:flex><span>	i <span style=color:#f92672>=</span> i <span style=color:#f92672>+</span> (i <span style=color:#f92672>&gt;&gt;&gt;</span> 32);
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> (<span style=color:#66d9ef>int</span>)i <span style=color:#f92672>&amp;</span> 0x7f;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>&mldr; what?</p><p>Magic numbers, bitwise operations and the result is computed in-place, meaning that no temporary variables are required.
+I was immediately hooked and began my deep dive into this topic.
+In this post, I want to showcase my journey towards understanding this weird blob of code and how one might come up with this algorithm themselves.
+If you wanna try and understand this snippet for yourself, go ahead and try it now!
+But if you keep reading, I&rsquo;m assuming you&rsquo;re fine with me &ldquo;spoiling&rdquo; the solution.</p><h2 id=bit-by-bit>Bit by bit</h2><p>There are some basic assumptions I&rsquo;m making from this point forward.
+As said in the intro, we&rsquo;ll focus on computing the popcount for a 64-bit integer.
+Once we know that, we can simply scale up to bitsets of arbitrary size by summing up the results for every integer in the underlying array.
+I&rsquo;m also not going to rely on external libraries or built-in functions from any programming language.
+The resulting code should be portable to any platform.</p><p>So, let&rsquo;s start by thinking about an easy approach to popcount.
+We&rsquo;ll cut ourselves some slack for now.
+To make things as simple as possible, let&rsquo;s store the result in a temporary counter variable for now.
+We could iterate over all bits in our integer.
+For every integer, we check whether the bit is set.
+If that&rsquo;s the case, we increment the counter variable by one.
+Once we&rsquo;re done, we return our counter.</p><p>A nifty way of looping over the bits of an integer goes as follows.
+First, we check the value of the least significant bit (LSB).
+Then we perform a bitwise right shift on our integer.
+This way, all bits in our integer will eventually end up as the LSB once.
+So armed with this knowledge, a simple implementation could look as follows.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>popcount</span>(<span style=color:#66d9ef>long</span> num) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> result <span style=color:#f92672>=</span> 0;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// iterate over all 64 bits of the parameter</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> i <span style=color:#f92672>=</span> 0; i <span style=color:#f92672>&lt;</span> 64; i<span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// check if the lsb is set</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> ((num <span style=color:#f92672>&amp;</span> 0x1) <span style=color:#f92672>==</span> 0x1) {
+</span></span><span style=display:flex><span>            <span style=color:#75715e>// if so, increment the counter</span>
+</span></span><span style=display:flex><span>            result <span style=color:#f92672>+=</span> 1;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// shift the number to the right by one bit</span>
+</span></span><span style=display:flex><span>        num <span style=color:#f92672>=</span> num <span style=color:#f92672>&gt;&gt;</span> 1;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> result;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Hm, looks clunky.
+There are a few flaws with this piece of code, so let&rsquo;s go through them one by one.
+First off, regardless of which number we pass into this function, it will always perform 64 iterations.
+This doesn&rsquo;t make sense if we, for example, pass in 1 as an argument.
+1, in binary, has one set bit which also happens to be the least significant bit.
+All other 63 bits are unset.
+In this case, we already have the correct result after the first iteration.</p><p>We want to stop the loop as soon as possible, meaning once there are no more set bits that contribute towards the counter.
+Fortunately, because we shift our integer to the right after every iteration, the integer will eventually end up being zero once there are no more set bits left.
+So we can adjust the loop by replacing the hard-coded constant 64 with a check whether the integer is zero or not.</p><p>Another thing we can improve is the if-check inside the loop.
+By performing a bitwise AND of our integer with 1, there are only two possible results: 1 if the LSB is set, and 0 if the LSB is unset.
+This means that we can use the result of the bitwise AND to increment our counter, saving us the &ldquo;if&rdquo; statement inside our loop.
+With these two improvements, the resulting code looks a lot neater.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>popcount</span>(<span style=color:#66d9ef>long</span> num) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> result <span style=color:#f92672>=</span> 0;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// loop until there are no more set bits left</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> (num <span style=color:#f92672>!=</span> 0) {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// use the result of the bitwise AND to increment the counter</span>
+</span></span><span style=display:flex><span>        result <span style=color:#f92672>+=</span> num <span style=color:#f92672>&amp;</span> 0x1;
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// this is the same as num = num &gt;&gt; 1, just a bit cleaner</span>
+</span></span><span style=display:flex><span>        num <span style=color:#f92672>&gt;&gt;=</span> 1;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> result;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Not bad.
+The best case of this function occurs when we pass in an integer where all bits are unset, giving us an instant result or, in big notation, <em>O(1)</em> time.
+If we pass in an integer where all bits are set however, we encounter the worst case.
+The loop will have to iterate over all bits.
+Assuming our integer has <em>n</em> bits, then we get a result in linear time, or <em>O(n)</em>.
+If we assume that all bits have an equal chance of being set, then we can expect that the function will return a result in <em>O(n/2)</em> time on average.</p><p>Interestingly, this method is called &ldquo;sideways addition&rdquo; and is a decent and easy-to-understand approach to popcounts.
+However, despite our optimization efforts, this function is still a far cry performance-wise from the function we&rsquo;re trying to understand.
+Note how the original function doesn&rsquo;t require any loops and temporary variables.
+This might not sound like much, but when popcounts are computed millions of times, then the latencies introduced by factors as small as these start to add up.
+We obviously need a different approach.</p><h2 id=everything-in-place>Everything in place</h2><p>New section, new rules.
+No temporary variables from this point forward.
+All operations must be in-place.
+Coming up with an algorithm for popcount on an arbitary integer is hard, so it&rsquo;s a good idea to split this problem up into smaller <del>byte</del>bit-sized problems.</p><p>First, let&rsquo;s think about how we could add up two bits in-place.
+In school, you&rsquo;d simply write some terms in a column and add them up.
+All we&rsquo;d have to do to make this work with our two-bit input is to move the high bit in the place of the low bit and then perform a normal addition.
+Fortunately, all we have to do is to shift our input to the right by one bit.
+If we obtain a copy of our original input, perform a shift on it and mask the low bit in both, we have successfully aligned the high and low bit to make in-place addition work.</p><p><img src=pprl-in-place-addition.png alt="Graph showing in-place addition of two bits. MSB and LSB are aligned such that they can be added on top of one another."></p><p>Let&rsquo;s apply this to our 64-bit input this time.
+We can add every two bits onto each other, meaning that when we pull this off, we&rsquo;re left with 32 intermediate sums.
+We&rsquo;ll use a bit mask that retains the low bit in every two-bit slice of our input, so in binary that&rsquo;s <code>01010101...</code>, or <code>5555...</code> in hexadecimal.
+Seems familiar?
+That&rsquo;s one of the magic numbers from the start of this post.
+Don&rsquo;t forget to shift a copy of our input to the right by one bit before masking and adding, and the first line of our actual popcount looks a lot more like the snippet we started with.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>popcount</span>(<span style=color:#66d9ef>long</span> num) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 0x5555... = 0b01010101...</span>
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> (num <span style=color:#f92672>&amp;</span> 0x5555555555555555L) <span style=color:#f92672>+</span> ((num <span style=color:#f92672>&gt;&gt;</span> 1) <span style=color:#f92672>&amp;</span> 0x5555555555555555L);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...?</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>We can repeat this procedure, turning 32 sums into 16, 16 into 8, 8 into 4, 4 into 2 and 2 into 1.
+This time, we operate on four-bit slices.
+The top and bottom two bits in each slice contain terms that we want to add onto each other.
+So let&rsquo;s create the mask for it.
+We retain the lowest two bits in every four-bit slice, so <code>00110011...</code> in binary, or <code>3333...</code> in hexadecimal.
+Yet another magic number!
+We need to be careful to shift the copy of our input by two bits to the right this time.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>popcount</span>(<span style=color:#66d9ef>long</span> num) {
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> (num <span style=color:#f92672>&amp;</span> 0x5555555555555555L) <span style=color:#f92672>+</span> ((num <span style=color:#f92672>&gt;&gt;</span> 1) <span style=color:#f92672>&amp;</span> 0x5555555555555555L);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 0x3333... = 0b00110011...</span>
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> (num <span style=color:#f92672>&amp;</span> 0x3333333333333333L) <span style=color:#f92672>+</span> ((num <span style=color:#f92672>&gt;&gt;</span> 2) <span style=color:#f92672>&amp;</span> 0x3333333333333333L);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...?</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Rinse and repeat.
+With 16 intermediate sums, every sum now takes up four bits, so we perform the in-place addition in eight-bit slices this time.
+Adjusting the bit mask yields <code>00001111...</code> in binary, or <code>0f0f...</code> in hexadecimal.
+How convenient!
+Of course, don&rsquo;t forget to move the input by four bits to the right this time.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>popcount</span>(<span style=color:#66d9ef>long</span> num) {
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> (num <span style=color:#f92672>&amp;</span> 0x5555555555555555L) <span style=color:#f92672>+</span> ((num <span style=color:#f92672>&gt;&gt;</span> 1) <span style=color:#f92672>&amp;</span> 0x5555555555555555L);
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> (num <span style=color:#f92672>&amp;</span> 0x3333333333333333L) <span style=color:#f92672>+</span> ((num <span style=color:#f92672>&gt;&gt;</span> 2) <span style=color:#f92672>&amp;</span> 0x3333333333333333L);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 0x0f0f0f0f... = 0b00001111...</span>
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> (num <span style=color:#f92672>&amp;</span> 0x0f0f0f0f0f0f0f0fL) <span style=color:#f92672>+</span> ((num <span style=color:#f92672>&gt;&gt;</span> 4) <span style=color:#f92672>&amp;</span> 0x0f0f0f0f0f0f0f0fL);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...?</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Sweet, the rest should be a breeze, right?
+Eight sums remain, each taking up eight bits.
+We can just make up the bit masks as we go and adjust the bit shift every time and we&rsquo;re golden, right? Technically, yes.
+But there is one cool optimization to be made at this point.
+We don&rsquo;t need to mask our bits anymore.
+Why so?</p><p>Our intermediate sums take up eight bits.
+This means that the range of possible sums as numeric values within these eight bits can only range from 0 to 7.
+However, the amount of possible values that could be represented by eight bits ranges from 0 to 255.
+Since our final sum can be 64 at max, every sum from this point forth will be very well contained within eight bits.
+Masking is therefore not necessary anymore.
+All we have to do is to shift and add, shift and add &mldr;</p><p>&mldr; so, let&rsquo;s finish this.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>popcount</span>(<span style=color:#66d9ef>long</span> num) {
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> (num <span style=color:#f92672>&amp;</span> 0x5555555555555555L) <span style=color:#f92672>+</span> ((num <span style=color:#f92672>&gt;&gt;</span> 1) <span style=color:#f92672>&amp;</span> 0x5555555555555555L);
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> (num <span style=color:#f92672>&amp;</span> 0x3333333333333333L) <span style=color:#f92672>+</span> ((num <span style=color:#f92672>&gt;&gt;</span> 2) <span style=color:#f92672>&amp;</span> 0x3333333333333333L);
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> (num <span style=color:#f92672>&amp;</span> 0x0f0f0f0f0f0f0f0fL) <span style=color:#f92672>+</span> ((num <span style=color:#f92672>&gt;&gt;</span> 4) <span style=color:#f92672>&amp;</span> 0x0f0f0f0f0f0f0f0fL);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// eight sums with eight bits each -&gt; four sums with 16 bits each</span>
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> num <span style=color:#f92672>+</span> (num <span style=color:#f92672>&gt;&gt;</span> 8);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// four sums with 16 bits each -&gt; two sums with 32 bits each</span>
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> num <span style=color:#f92672>+</span> (num <span style=color:#f92672>&gt;&gt;</span> 16);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// two sums with 32 bits each -&gt; one sum</span>
+</span></span><span style=display:flex><span>    num <span style=color:#f92672>=</span> num <span style=color:#f92672>+</span> (num <span style=color:#f92672>&gt;&gt;</span> 32);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// cast back to int</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> (<span style=color:#66d9ef>int</span>)num <span style=color:#f92672>&amp;</span> 0x7f;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Now this is pretty close to the original, and for most applications this will be plenty fast.
+But we&rsquo;re not at the end yet, because if we look elsewhere, we&rsquo;ll find a few more interesting optimizations.</p><h2 id=adding-by-subtracting>Adding by subtracting</h2><p>You might remember from the original snippet that the first line didn&rsquo;t include an addition of bits but rather a subtraction.
+We&rsquo;re saving one bitwise AND, but how does this make sense with the approach we discussed so far?</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>int</span> <span style=color:#a6e22e>bitCount</span>(<span style=color:#66d9ef>long</span> i) {
+</span></span><span style=display:flex><span>	i <span style=color:#f92672>=</span> i <span style=color:#f92672>-</span> ((i <span style=color:#f92672>&gt;&gt;&gt;</span> 1) <span style=color:#f92672>&amp;</span> 0x5555555555555555L);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>To be honest, I can offer no insights in how one might&rsquo;ve been able to come up with this.
+That won&rsquo;t stop me from trying though.
+Let&rsquo;s think back to the original problem of calculating the popcount of a two-bit slice.
+What we effectively want is some function that maps the inputs to the outputs shown below.</p><table><thead><tr><th style=text-align:right><strong>Input (numeric)</strong></th><th style=text-align:right><strong>Input (binary)</strong></th><th style=text-align:center><strong>=></strong></th><th style=text-align:right><strong>Output (binary)</strong></th><th style=text-align:right><strong>Output (numeric)</strong></th></tr></thead><tbody><tr><td style=text-align:right>0</td><td style=text-align:right>00</td><td style=text-align:center></td><td style=text-align:right>00</td><td style=text-align:right>0</td></tr><tr><td style=text-align:right>1</td><td style=text-align:right>01</td><td style=text-align:center></td><td style=text-align:right>01</td><td style=text-align:right>1</td></tr><tr><td style=text-align:right>2</td><td style=text-align:right>10</td><td style=text-align:center></td><td style=text-align:right>01</td><td style=text-align:right>1</td></tr><tr><td style=text-align:right>3</td><td style=text-align:right>11</td><td style=text-align:center></td><td style=text-align:right>10</td><td style=text-align:right>2</td></tr></tbody></table><p>Our inputs range from 0 to 3 but our outputs only go from 0 to 2.
+Furthermore, 0 and 1 stay the same, while 2 and 3 are reduced by one to get the output we want.
+We can see that for 2 and 3, the top bit is set.
+How convenient!</p><p>All we have to do to map 2 and 3 to their correct outputs is to subtract by one and we&rsquo;re done.
+Whether the top bit is set or not determines whether a subtraction is necessary or not.
+So all we have to do is to take a copy of our input, shift the top bit in the place of the bottom bit with a bitwise right shift, mask the bit and subtract it from the input.
+For 2 and 3, this will perform a subtraction by one.
+But since the top bit isn&rsquo;t set for 0 and 1, the inputs remain untouched.</p><h2 id=adding-by--multiplying>Adding by &mldr; multiplying?</h2><p>But wait, there&rsquo;s more!
+During my research I found another popcount variant in the <a href=https://github.com/bits-and-blooms/bitset/blob/a97a5708daa14316d97081b32530defba4e9e6ed/popcnt.go#L6>bitset Go package</a>.
+Most of the magic we know is still there, but there is one unusual operation in there.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>popcount</span>(<span style=color:#a6e22e>x</span> <span style=color:#66d9ef>uint64</span>) (<span style=color:#a6e22e>n</span> <span style=color:#66d9ef>uint64</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>x</span> <span style=color:#f92672>-=</span> (<span style=color:#a6e22e>x</span> <span style=color:#f92672>&gt;&gt;</span> <span style=color:#ae81ff>1</span>) <span style=color:#f92672>&amp;</span> <span style=color:#ae81ff>0x5555555555555555</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>x</span> = (<span style=color:#a6e22e>x</span><span style=color:#f92672>&gt;&gt;</span><span style=color:#ae81ff>2</span>)<span style=color:#f92672>&amp;</span><span style=color:#ae81ff>0x3333333333333333</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>x</span><span style=color:#f92672>&amp;</span><span style=color:#ae81ff>0x3333333333333333</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>x</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>x</span> <span style=color:#f92672>&gt;&gt;</span> <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>x</span> <span style=color:#f92672>&amp;=</span> <span style=color:#ae81ff>0x0f0f0f0f0f0f0f0f</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>x</span> <span style=color:#f92672>*=</span> <span style=color:#ae81ff>0x0101010101010101</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>x</span> <span style=color:#f92672>&gt;&gt;</span> <span style=color:#ae81ff>56</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>The first three steps are the same.
+64 bits are reduced into 32 partial popcounts, then 16, then 8.
+And then there&rsquo;s a multiplication.
+It&rsquo;s fairly obvious that the factor we&rsquo;re multiplying by has the lowest bit in every eight-bit slice set.
+So what does this accomplish exactly?</p><p>For the sake of this explanation, let&rsquo;s pretend our input is the first and <code>0x0101...</code> the second factor.
+If you recall long multiplication from school, you work from least to most significant digit of your second factor, multiply them with the first factor and take down the partial results in the columns of their respective digits.
+Once you&rsquo;re done with all digits, you sum up all your partial results to give you the final result.</p><p>However, with the way that the second factor is structured, it just so happens that every eight-bit slice ends up in the column belonging to the first slice.
+So when all results are summed up, the first column will actually contain the sum of all eight-bit slices, which just so happens to be the sum of all partial popcounts.
+Shifting the final result to the right by 56 bits moves the popcount into a place where it can be easily retrieved.</p><p>This operation is better explained with a small visualization.
+In the following image, all eight-bit slices are represented by a different color.
+You&rsquo;ll see that all partial popcounts are summed up in the process of long multiplication within the first column.</p><p><img src=pprl-in-place-multiplication.png alt="Graph showing in-place multiplication of eight 8-bit slices. The values in all 8-bit slices are summed up in the process of long multiplication, accumulated in the first column."></p><h2 id=whats-next>What&rsquo;s next?</h2><p>So this was a bit (ha!) of a detour from my PPRL endeavors.
+Binary operations fascinate me because of their ruthless efficiency and the way they make code look like magic.
+Peeling back the layers on them to understand what they really do offers some deep insights into how computers really &ldquo;work&rdquo;.</p><p>As for what&rsquo;s next in this series, I&rsquo;m not sure yet.
+I&rsquo;ve covered most of the bases that I wanted to talk about.
+There&rsquo;s one more post somewhere in my scattered master thesis notes, but it&rsquo;ll take some time to make sense of them.
+Still, I hope you enjoyed the journey so far and learned about a few odd bits about a very unique area of research.</p><div class=footnotes role=doc-endnotes><hr><ol><li id=fn:1><p>The actual size of these integers depends on many factors, such as the programming language, system platform, processor architecture and available instructions. For the sake of simplicity however, I&rsquo;m assuming we&rsquo;re talking about 64-bit unsigned integers.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></div></main><footer class=page-footer><hr><nav class="nav footer-nav"><ul><li class=nomarker><a href=https://creativecommons.org/licenses/by/4.0/>CC BY 4.0</a></li><li><a href=https://eulenbu.de/impressum>Impressum</a></li></ul></nav></footer><div class=owl-container><div class=owl><input type=button class=owl-btn><div class=owl-counter>&#9829; &#215; <span class=owl-counter-value>1,337</span></div></div></div></div><script src=https://eulenbu.de/js/background.js></script><script src=https://eulenbu.de/js/owl.js></script></body></html>

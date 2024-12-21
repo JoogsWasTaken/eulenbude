@@ -1,0 +1,304 @@
+:root {
+  --font-monospace: "Iosevka", monospace;
+}
+
+@font-face {
+  font-family: "Iosevka";
+  font-display: swap;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+  src:
+    url("fonts/Iosevka.woff2") format("woff2"),
+    url("fonts/Iosevka.woff") format("woff"),
+    url("fonts/Iosevka.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Iosevka";
+  font-display: swap;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: italic;
+  src:
+    url("fonts/Iosevka-Italic.woff2") format("woff2"),
+    url("fonts/Iosevka-Italic.woff") format("woff"),
+    url("fonts/Iosevka-Italic.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Iosevka";
+  font-display: swap;
+  font-weight: 800;
+  font-stretch: normal;
+  font-style: normal;
+  src:
+    url("fonts/Iosevka-Extrabold.woff2") format("woff2"),
+    url("fonts/Iosevka-Extrabold.woff") format("woff"),
+    url("fonts/Iosevka-Extrabold.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Iosevka";
+  font-display: swap;
+  font-weight: 800;
+  font-stretch: normal;
+  font-style: italic;
+  src:
+    url("fonts/Iosevka-Extrabold-Italic.woff2") format("woff2"),
+    url("fonts/Iosevka-Extrabold-Italic.woff") format("woff"),
+    url("fonts/Iosevka-Extrabold-Italic.ttf") format("ttf");
+}
+
+body {
+  font-family: var(--font-monospace);
+  font-variant-ligatures: none;
+  font-size: 16px;
+  line-height: 1.5rem;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 1rem;
+  margin: 1.5rem 0 0 0;
+  font-weight: 800;
+}
+
+h1:before {
+  content: "# ";
+}
+h2:before {
+  content: "## ";
+}
+h3:before {
+  content: "### ";
+}
+h4:before {
+  content: "#### ";
+}
+h5:before {
+  content: "##### ";
+}
+h6:before {
+  content: "###### ";
+}
+
+h1 + h2,
+h1 + h3,
+h1 + h4,
+h1 + h5,
+h1 + h6,
+h2 + h3,
+h2 + h4,
+h2 + h5,
+h2 + h6,
+h3 + h4,
+h3 + h5,
+h3 + h6,
+h4 + h5,
+h4 + h6,
+h5 + h6 {
+  margin: 0;
+}
+
+h1:before,
+h2:before,
+h3:before,
+h4:before,
+h5:before,
+h6:before {
+  color: var(--color-fg-muted);
+}
+
+h1:first-child {
+  margin-top: 0;
+}
+
+p {
+  margin: 0 0 1.5rem 0;
+}
+
+a:link,
+a:visited {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+a:hover,
+a:active {
+  background-color: var(--color-accent-transparent);
+}
+
+ul {
+  margin: 0 0 1.5rem 0;
+  padding-left: 1.25rem;
+}
+
+ol {
+  margin: 0 0 1.5rem 0;
+  padding-left: 1.75rem;
+}
+
+ul ul,
+ul ol,
+ol ul,
+ol ol {
+  margin: 0;
+}
+
+ul li::marker {
+  content: "∗\00A0";
+  color: var(--color-fg-muted);
+}
+
+ol li::marker {
+  color: var(--color-fg-muted);
+}
+
+li.nomarker {
+  display: block;
+}
+
+dt {
+  margin: 0;
+  font-weight: 800;
+}
+
+dd {
+  margin: 0 0 0 1.5rem;
+  font-style: italic;
+}
+
+dd + dt {
+  margin-top: 1.5rem;
+}
+
+dl {
+  margin: 0 0 1.5rem 0;
+}
+
+blockquote {
+  position: relative;
+  margin: 0 0 1.5rem 1.5rem;
+}
+
+blockquote::before {
+  position: absolute;
+  left: -1.5rem;
+  content: ">";
+  color: var(--color-fg-muted);
+}
+
+pre,
+code,
+kbd,
+samp {
+  background: var(--color-bg-muted) !important;
+  font-family: var(--font-monospace);
+  color: var(--color-fg);
+}
+
+pre {
+  overflow-x: auto;
+  padding: 1.5rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.highlight div {
+  overflow-x: auto;
+}
+
+b,
+strong {
+  font-weight: 800;
+}
+
+::selection,
+mark {
+  background-color: var(--color-accent-transparent);
+  color: var(--color-fg);
+}
+
+hr {
+  border: 0;
+  margin-bottom: 1.5rem;
+}
+
+hr:after {
+  content: "---";
+  color: var(--color-fg-muted);
+}
+
+sup,
+sub {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.25rem;
+  font-size: unset;
+}
+
+sub {
+  top: 0.25rem;
+}
+
+table {
+  border-spacing: 0;
+  margin: 0 0 1.5rem 0;
+  overflow-wrap: anywhere;
+  border: 1px solid white;
+}
+
+table.noborder {
+  border: none;
+}
+
+th {
+  border-bottom: 1px solid var(--color-fg);
+}
+
+table.noborder th {
+  border-bottom: none;
+}
+
+th,
+td {
+  border-right: 1px solid var(--color-fg);
+}
+
+table.noborder th,
+table.noborder td {
+  border-right: none;
+}
+
+th,
+td {
+  padding: 0.25rem 0.75rem;
+  vertical-align: top;
+}
+
+table.noborder th,
+table.noborder td {
+  padding: 0 0.75rem;
+}
+
+th {
+  text-align: inherit;
+}
+
+table.noborder th:first-child,
+table.noborder td:first-child {
+  padding-left: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
