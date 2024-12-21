@@ -43,4 +43,5 @@
 
 .post-list td.post-date {
   color: var(--color-fg-muted);
+  white-space: nowrap;
 }
