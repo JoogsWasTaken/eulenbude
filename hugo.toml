@@ -7,6 +7,12 @@ disableKinds = ["taxonomy", "term"]
 [params]
 tags = ["cybersec", "cybersecurity", "dev", "development", "sysadmin", "system administration", "blog", "tech", "technology"]
 
+[markup]
+    [markup.goldmark]
+        [markup.goldmark.parser]
+            [markup.goldmark.parser.attribute]
+                block = true
+
 [[menus.main]]
 name = 'Posts'
 pageRef = '/posts'

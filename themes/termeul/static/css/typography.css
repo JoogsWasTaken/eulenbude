@@ -291,6 +291,11 @@ th {
   text-align: inherit;
 }
 
+table thead tr,
+table tbody tr:nth-child(2n) {
+  background-color: var(--color-bg-muted);
+}
+
 table.noborder th:first-child,
 table.noborder td:first-child {
   padding-left: 0;
@@ -301,4 +306,8 @@ img {
   height: auto;
   display: block;
   margin: 0 auto;
+}
+
+table.nobg tr {
+  background-color: transparent !important;
 }

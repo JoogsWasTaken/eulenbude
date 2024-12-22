@@ -26,6 +26,7 @@ And just to drive the point of being careful with the data you share about yours
 The fact that not every piece of personal information is equally suitable for record linkage is not new.
 Take the following randomly generated excerpt from a fictional database of every human on earth for example.
 
+<!-- prettier-ignore-start -->
 | **Given name** | **Last name** | **Sex** | **Date of birth** |
 | :------------- | :------------ | :-----: | ----------------: |
 | Leslie         | Davis         |    F    |        1948-01-28 |
@@ -33,6 +34,8 @@ Take the following randomly generated excerpt from a fictional database of every
 | Liliana        | Davis         |    F    |        1971-04-06 |
 | Kathleen       | Howell        |    F    |        1962-10-28 |
 | Kenneth        | Galarza       |    M    |        1960-10-22 |
+{.tab-nowrap-3}
+<!-- prettier-ignore-end -->
 
 At a glance, if I challenged you to reidentify a person using only their sex, then you'd probably call me insane.
 You'd find a lot more success using a person's given name, last name or date of birth in this case.
@@ -128,12 +131,15 @@ So I coded a little tool that would help me answer these types of questions.
 To demonstrate, I ran a few queries to show you how some things you probably already intuitively know are reflected in this dataset.
 Each table from this point forward shows the personal attributes that I combined, the percentage (with respect to the total amount of records in the filtered dataset) and amount of people who are uniquely identifiable by this combination.
 
+<!-- prettier-ignore-start -->
 | **Query**          | **# unique** | **%** |
 | :----------------- | -----------: | ----: |
 | First name         |         171k |  2.8% |
 | Last name          |         203k |  3.3% |
 | First name, gender |         206k |  3.3% |
 | Last name, gender  |         375k |  6.0% |
+{.tab-nowrap-2 .tab-nowrap-3}
+<!-- prettier-ignore-end -->
 
 If you know someone's gender, you're more likely to identify them if you know their last name rather than their first name.
 This makes sense considering there are names that are more likely to be given to females at birth rather than males, and vice versa.
@@ -141,18 +147,22 @@ Or, to put it differently, if you know someone's first name, you probably alread
 This won't work if you're just provided with their last name most of the time.
 Whether you _should_ go out to assume people's genders based on their first name is a different question --- one that I am _definitely not_ capable of answering.
 
+<!-- prettier-ignore-start -->
 | **Query**                             | **# unique** | **%** |
 | :------------------------------------ | -----------: | ----: |
 | First name                            |         171k |  2.8% |
 | Last name                             |         203k |  3.3% |
 | First name, first letter of last name |         415k |  6.7% |
 | First letter of first name, last name |         805k | 13.0% |
+{.tab-nowrap-2 .tab-nowrap-3}
+<!-- prettier-ignore-end -->
 
 Just by adding one more letter, we can identify a lot more people all of a sudden.
 We can identify 2.5 times as many people by using the first letter of their last name in addition to their first name, and even four times as many people by doing the same in reverse.
 It's not an uncommon pattern to see people shortening their first or last name in order to make themselves a little more identifiable without spoiling their whole name.
 And while this will work for many, people whose first or last name start with uncommon letters should definitely beware.
 
+<!-- prettier-ignore-start -->
 | **Query**                                                | **# unique** | **%** |
 | :------------------------------------------------------- | -----------: | ----: |
 | First name                                               |         171k |  2.8% |
@@ -161,6 +171,8 @@ And while this will work for many, people whose first or last name start with un
 | First name, city of residence                            |         854k | 13.7% |
 | First name, first letter of last name, city of residence |        2.34m | 37.6% |
 | First letter of first name, last name, city of residence |        3.23m | 51.9% |
+{.tab-nowrap-2 .tab-nowrap-3}
+<!-- prettier-ignore-end -->
 
 Let's bring in another piece of personal information: addresses.
 I'm using people's city of residence because it's a good middle ground between their county, which there are only exactly 100 of at the time of writing, and their street and building number, which is already an insanely powerful piece of information on its own.
@@ -174,6 +186,7 @@ But again, if we shift our focus to the last two rows, the power of just having 
 All of a sudden, using full last names surpasses using first names.
 What we lost in terms of being able to tell people with the same last names living in the same city apart, we gained by a confident margin by simply using the first letter of their first name.
 
+<!-- prettier-ignore-start -->
 | **Query**                                          | **# unique** | **%** |
 | :------------------------------------------------- | -----------: | ----: |
 | First name                                         |         171k |  2.8% |
@@ -183,6 +196,8 @@ What we lost in terms of being able to tell people with the same last names livi
 | First name, last name, city of residence           |        5.61m | 90.4% |
 | First name, last name, zip code of residence       |        5.86m | 94.4% |
 | First name, last name, street address of residence |        6.14m | 98.9% |
+{.tab-nowrap-2 .tab-nowrap-3}
+<!-- prettier-ignore-end -->
 
 What personally surprised me the most, even though it shouldn't surprise me at all, is that when both the full first and last name are used, we can suddenly uniquely identify anywhere between 15 and 18 times more people compared to using only their first or last name respectively.
 This only gets worse when we add just one extra piece of information on a person's whereabouts.
