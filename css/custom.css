@@ -1,0 +1,23 @@
+table.tab-nowrap-2 th:nth-child(2) {
+  white-space: nowrap;
+}
+
+table.tab-nowrap-2 td:nth-child(2) {
+  white-space: nowrap;
+}
+
+table.tab-nowrap-3 th:nth-child(3) {
+  white-space: nowrap;
+}
+
+table.tab-nowrap-3 td:nth-child(3) {
+  white-space: nowrap;
+}
+
+table.tab-nowrap-4 th:nth-child(4) {
+  white-space: nowrap;
+}
+
+table.tab-nowrap-4 td:nth-child(4) {
+  white-space: nowrap;
+}
