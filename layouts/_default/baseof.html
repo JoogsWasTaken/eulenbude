@@ -1,8 +1,5 @@
 <!doctype html>
-<html
-  lang="{{ site.Language.LanguageCode }}"
-  dir="{{ or site.Language.LanguageDirection `ltr` }}"
->
+<html lang="{{ or site.Language.LanguageCode "en" }}">
   <head>
     {{ partial "head.html" . }}
   </head>
@@ -14,17 +11,18 @@
     </div>
     <div class="page">
       <header class="page-header">
-        {{ partial "header.html" . }}
+        {{ block "header" . }}{{ partial "header.html" . }}{{ end }}
       </header>
       <main class="page-main">
         {{ block "main" . }}{{ end }}
       </main>
       <footer class="page-footer">
-        {{ partial "footer.html" . }}
+        {{ block "footer" . }}{{ partial "footer.html" . }}{{ end }}
       </footer>
-      <div class="owl-container">
+      {{/* Override base template to include owl (important!) */}}
+      <div class="page-owl">
         <div class="owl">
-          <input type="button" class="owl-btn" value="" />
+          <input type="button" class="owl-btn" value="Pat the owl" />
           <div class="owl-counter">
             &hearts; &times; <span class="owl-counter-value">1,337</span>
           </div>
@@ -32,6 +30,6 @@
       </div>
     </div>
     <script src="{{ "js/background.js" | absURL }}"></script>
-    <script src="{{ "js/owl.js" | absURL }}"></script>
+    <script src="{{ "js/custom.js" | absURL }}"></script>
   </body>
 </html>
