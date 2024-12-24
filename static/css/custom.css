@@ -46,6 +46,7 @@
   background-position-x: -192px;
   background-size: cover;
   outline: none;
+  color: transparent;
 }
 
 .page-owl .owl-btn:active {
