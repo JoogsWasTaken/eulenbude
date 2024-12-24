@@ -1,0 +1,3 @@
+[submodule "themes/termeul"]
+	path = themes/termeul
+	url = git@github.com:JoogsWasTaken/termeul.git
