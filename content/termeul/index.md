@@ -5,6 +5,7 @@ title = 'Termeul'
 +++
 
 Termeul is the name of the theme for this website.
+[You can check it out on GitHub.](https://github.com/JoogsWasTaken/termeul)
 
 <!--more-->
 
@@ -71,5 +72,4 @@ This also applies to the owl at the bottom of the page now.
 
 Personally, I'm very happy with how Termeul turned out.
 It uses very few templates, has a great overall look and is based on the work of awesome people who know a lot more about crafting good themes than I do.
-Currently, the theme only resides in my [repository for the entire website](https://github.com/JoogsWasTaken/eulenbude).
-Once I clean the theme up, I will publish it separately.
+You can install it like any other Hugo theme by [following the instructions in the Termeul repository](https://github.com/JoogsWasTaken/termeul?tab=readme-ov-file#install).

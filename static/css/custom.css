@@ -103,3 +103,8 @@ table.tab-nowrap-4 th:nth-child(4),
 table.tab-nowrap-4 td:nth-child(4) {
   white-space: nowrap;
 }
+
+/* Make bottom padding adapt for owl */
+.page {
+  padding-bottom: 0;
+}
