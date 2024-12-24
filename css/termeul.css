@@ -16,6 +16,7 @@ body {
 .page {
   max-width: 64rem;
   margin: 1rem auto;
+  padding: 2rem;
 }
 
 .page-logo:before {

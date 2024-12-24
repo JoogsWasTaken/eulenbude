@@ -21,7 +21,7 @@
   width: 100%;
   height: 100%;
   /* background setup */
-  background-image: url("/img/bg-stars.png");
+  background-image: url("../img/bg-stars.png");
   background-position-y: 0px;
   image-rendering: pixelated;
 }
