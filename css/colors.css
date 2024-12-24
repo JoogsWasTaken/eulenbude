@@ -1,3 +1,4 @@
+/* palette from https://colorhunt.co/palette/2e0249570a57a91079f806cc */
 :root {
   /* background */
   --color-bg-gradient-dark: rgb(46, 2, 73);
@@ -11,4 +12,24 @@
   --color-fg-muted: rgb(204, 204, 204);
   --color-accent: rgb(248, 6, 204);
   --color-accent-transparent: rgba(248, 6, 204, 0.2);
+}
+
+.bg-color {
+  background-color: var(--color-bg);
+}
+
+.bg-color-muted {
+  background-color: var(--color-bg-muted);
+}
+
+.text-color {
+  color: var(--color-fg);
+}
+
+.text-color-muted {
+  color: var(--color-fg-muted);
+}
+
+.text-color-accent {
+  color: var(--color-accent);
 }

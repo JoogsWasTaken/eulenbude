@@ -1,64 +1,17 @@
-:root {
-  --font-monospace: "Iosevka", monospace;
-}
-
-@font-face {
-  font-family: "Iosevka";
-  font-display: swap;
-  font-weight: 400;
-  font-stretch: normal;
-  font-style: normal;
-  src:
-    url("fonts/Iosevka.woff2") format("woff2"),
-    url("fonts/Iosevka.woff") format("woff"),
-    url("fonts/Iosevka.ttf") format("ttf");
-}
-
-@font-face {
-  font-family: "Iosevka";
-  font-display: swap;
-  font-weight: 400;
-  font-stretch: normal;
-  font-style: italic;
-  src:
-    url("fonts/Iosevka-Italic.woff2") format("woff2"),
-    url("fonts/Iosevka-Italic.woff") format("woff"),
-    url("fonts/Iosevka-Italic.ttf") format("ttf");
-}
-
-@font-face {
-  font-family: "Iosevka";
-  font-display: swap;
+/* emphasis */
+b,
+strong {
   font-weight: 800;
-  font-stretch: normal;
-  font-style: normal;
-  src:
-    url("fonts/Iosevka-Extrabold.woff2") format("woff2"),
-    url("fonts/Iosevka-Extrabold.woff") format("woff"),
-    url("fonts/Iosevka-Extrabold.ttf") format("ttf");
 }
 
-@font-face {
-  font-family: "Iosevka";
-  font-display: swap;
-  font-weight: 800;
-  font-stretch: normal;
-  font-style: italic;
-  src:
-    url("fonts/Iosevka-Extrabold-Italic.woff2") format("woff2"),
-    url("fonts/Iosevka-Extrabold-Italic.woff") format("woff"),
-    url("fonts/Iosevka-Extrabold-Italic.ttf") format("ttf");
-}
-
-body {
-  font-family: var(--font-monospace);
-  font-variant-ligatures: none;
-  font-size: 16px;
-  line-height: 1.5rem;
-  background-color: var(--color-bg);
+/* browser selection */
+::selection,
+mark {
+  background-color: var(--color-accent-transparent);
   color: var(--color-fg);
 }
 
+/* headings */
 h1,
 h2,
 h3,
@@ -120,10 +73,12 @@ h1:first-child {
   margin-top: 0;
 }
 
+/* paragraphs */
 p {
   margin: 0 0 1.5rem 0;
 }
 
+/* links */
 a:link,
 a:visited {
   color: var(--color-accent);
@@ -135,6 +90,7 @@ a:active {
   background-color: var(--color-accent-transparent);
 }
 
+/* lists */
 ul {
   margin: 0 0 1.5rem 0;
   padding-left: 1.25rem;
@@ -161,10 +117,11 @@ ol li::marker {
   color: var(--color-fg-muted);
 }
 
-li.nomarker {
+li.li-no-marker {
   display: block;
 }
 
+/* descriptions */
 dt {
   margin: 0;
   font-weight: 800;
@@ -183,6 +140,7 @@ dl {
   margin: 0 0 1.5rem 0;
 }
 
+/* blockquotes */
 blockquote {
   position: relative;
   margin: 0 0 1.5rem 1.5rem;
@@ -195,6 +153,7 @@ blockquote::before {
   color: var(--color-fg-muted);
 }
 
+/* code */
 pre,
 code,
 kbd,
@@ -214,16 +173,7 @@ pre {
   overflow-x: auto;
 }
 
-b,
-strong {
-  font-weight: 800;
-}
-
-::selection,
-mark {
-  background-color: var(--color-accent-transparent);
-  color: var(--color-fg);
-}
+/* horizontal rules */
 
 hr {
   border: 0;
@@ -235,6 +185,7 @@ hr:after {
   color: var(--color-fg-muted);
 }
 
+/* sub-/superscript */
 sup,
 sub {
   vertical-align: baseline;
@@ -247,6 +198,7 @@ sub {
   top: 0.25rem;
 }
 
+/* tables */
 table {
   border-spacing: 0;
   margin: 0 0 1.5rem 0;
@@ -254,26 +206,13 @@ table {
   border: 1px solid white;
 }
 
-table.noborder {
-  border: none;
-}
-
 th {
   border-bottom: 1px solid var(--color-fg);
-}
-
-table.noborder th {
-  border-bottom: none;
 }
 
 th,
 td {
   border-right: 1px solid var(--color-fg);
-}
-
-table.noborder th,
-table.noborder td {
-  border-right: none;
 }
 
 th,
@@ -282,32 +221,18 @@ td {
   vertical-align: top;
 }
 
-table.noborder th,
-table.noborder td {
-  padding: 0 0.75rem;
-}
-
 th {
   text-align: inherit;
 }
 
-table thead tr,
-table tbody tr:nth-child(2n) {
+table tbody tr:nth-child(2n + 1) {
   background-color: var(--color-bg-muted);
 }
 
-table.noborder th:first-child,
-table.noborder td:first-child {
-  padding-left: 0;
-}
-
+/* Images */
 img {
   max-width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
-}
-
-table.nobg tr {
-  background-color: transparent !important;
 }

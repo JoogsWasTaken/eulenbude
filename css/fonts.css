@@ -1,0 +1,57 @@
+:root {
+  --font-monospace: "Iosevka", monospace;
+}
+
+@font-face {
+  font-family: "Iosevka";
+  font-display: swap;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+  src:
+    url("fonts/Iosevka.woff2") format("woff2"),
+    url("fonts/Iosevka.woff") format("woff"),
+    url("fonts/Iosevka.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Iosevka";
+  font-display: swap;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: italic;
+  src:
+    url("fonts/Iosevka-Italic.woff2") format("woff2"),
+    url("fonts/Iosevka-Italic.woff") format("woff"),
+    url("fonts/Iosevka-Italic.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Iosevka";
+  font-display: swap;
+  font-weight: 800;
+  font-stretch: normal;
+  font-style: normal;
+  src:
+    url("fonts/Iosevka-Extrabold.woff2") format("woff2"),
+    url("fonts/Iosevka-Extrabold.woff") format("woff"),
+    url("fonts/Iosevka-Extrabold.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Iosevka";
+  font-display: swap;
+  font-weight: 800;
+  font-stretch: normal;
+  font-style: italic;
+  src:
+    url("fonts/Iosevka-Extrabold-Italic.woff2") format("woff2"),
+    url("fonts/Iosevka-Extrabold-Italic.woff") format("woff"),
+    url("fonts/Iosevka-Extrabold-Italic.ttf") format("ttf");
+}
+
+body {
+  font-family: var(--font-monospace);
+  font-variant-ligatures: none;
+  font-size: 16px;
+}

@@ -1,5 +1,92 @@
-@import url("colors.css");
-@import url("typography.css");
-@import url("layout.css");
-@import url("background.css");
-@import url("owl.css");
+@import url(fonts.css);
+@import url(colors.css);
+@import url(elements.css);
+@import url(background.css);
+
+body {
+  font-family: var(--font-monospace);
+  font-variant-ligatures: none;
+  font-size: 16px;
+  line-height: 1.5rem;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
+
+/* content */
+.page {
+  max-width: 64rem;
+  margin: 1rem auto;
+}
+
+.page-logo:before {
+  content: none;
+}
+
+/* header nav */
+.nav ul {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem 2rem;
+}
+
+.nav ul li::marker {
+  content: "> ";
+}
+
+/* main nav */
+.nav-main ul li {
+  background: var(--color-bg);
+  box-shadow: 0 0 0 1rem var(--color-bg);
+}
+
+/* main content */
+.page-main {
+  margin: 2rem 0 0 0;
+  background: var(--color-bg);
+  box-shadow: 0 0 0 1rem var(--color-bg);
+}
+
+/* footer content */
+.page-footer {
+  color: var(--color-fg-muted);
+  background: var(--color-bg);
+  box-shadow: 0 0 0 1rem var(--color-bg);
+}
+
+.page-footer p:last-child {
+  margin-bottom: 0;
+}
+
+/* posts */
+.post .post-date {
+  color: var(--color-fg-muted);
+}
+
+/* post table */
+table.tab-posts {
+  border: none;
+}
+
+table.tab-posts tr {
+  background: transparent !important;
+}
+
+table.tab-posts th:first-child,
+table.tab-posts td:first-child {
+  padding-left: 0;
+}
+
+table.tab-posts th,
+table.tab-posts td {
+  border: none;
+  padding: 0 0.75rem;
+}
+
+table.tab-posts .tab-posts-date {
+  white-space: nowrap;
+  color: var(--color-fg-muted);
+}

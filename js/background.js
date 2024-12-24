@@ -3,8 +3,8 @@ const prefersReducedMotion = window.matchMedia(
 ).matches;
 
 if (!prefersReducedMotion) {
-  const bgLayer0 = document.querySelector(".bg-layer-back");
-  const bgLayer1 = document.querySelector(".bg-layer-front");
+  const bgLayerBack = document.querySelector(".bg-layer-back");
+  const bgLayerFront = document.querySelector(".bg-layer-front");
 
   const startY = window.scrollY;
   const scrollFactor = 0.1;
@@ -13,11 +13,11 @@ if (!prefersReducedMotion) {
   const doParallax = () => {
     const offsetY = window.scrollY - startY;
 
-    const layer1Pos = Math.floor(-offsetY * scrollFactor);
-    const layer0Pos = Math.floor(layer1Pos * parallaxFactor);
+    const layerBackPos = Math.floor(-offsetY * scrollFactor);
+    const layerFrontPos = Math.floor(layerBackPos * parallaxFactor);
 
-    bgLayer0.style.backgroundPositionY = `${layer0Pos}px`;
-    bgLayer1.style.backgroundPositionY = `${layer1Pos}px`;
+    bgLayerBack.style.backgroundPositionY = `${layerFrontPos}px`;
+    bgLayerFront.style.backgroundPositionY = `${layerBackPos}px`;
   };
 
   window.addEventListener("scroll", () => {
