@@ -248,13 +248,14 @@ To be honest, I can offer no insights in how one might've been able to come up w
 That won't stop me from trying though.
 Let's think back to the original problem of calculating the popcount of a two-bit slice.
 What we effectively want is some function that maps the inputs to the outputs shown below.
+The binary representation of each number is added in brackets.
 
-| **Input (numeric)** | **Input (binary)** | **=>** | **Output (binary)** | **Output (numeric)** |
-| ------------------: | -----------------: | :----: | ------------------: | -------------------: |
-|                   0 |                 00 |        |                  00 |                    0 |
-|                   1 |                 01 |        |                  01 |                    1 |
-|                   2 |                 10 |        |                  01 |                    1 |
-|                   3 |                 11 |        |                  10 |                    2 |
+| **Input** | **Output** |
+| --------: | ---------: |
+|  0 (0b00) |   0 (0b00) |
+|  1 (0b01) |   1 (0b01) |
+|  2 (0b10) |   1 (0b01) |
+|  3 (0b11) |   2 (0b10) |
 
 Our inputs range from 0 to 3 but our outputs only go from 0 to 2.
 Furthermore, 0 and 1 stay the same, while 2 and 3 are reduced by one to get the output we want.
