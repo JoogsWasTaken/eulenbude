@@ -209,7 +209,7 @@ However, we now know two components that we can make use of that directly impact
 But if you're still not convinced that basic Bloom filters aren't safe for record linkage, there is one more attack that I'd like to dig into.
 It's special because not only is it fast to perform, it also doesn't require any knowledge of Bloom filter parameters.
 
-### Being called "Peter Müller" is a security risk in Germany
+## Being called "Peter Müller" is a security risk in Germany
 
 Christen et al.[^4] were the first ones to describe this attack.
 Once again, we're exploiting the fact that certain bit patterns are bound to appear more often than others with large datasets.

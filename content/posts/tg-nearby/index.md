@@ -38,7 +38,7 @@ Whether you agree with how the "People Nearby" feature works is up to you. I wil
 
 He had spoofed his GPS location on his phone to put himself six meters away from me. He then shared a screenshot of the app he used to fake his location and, indeed, he put himself right into my bedroom. This meant that not only was the distance shown for every user pretty accurate, but it also updated very frequently. I'm using the word "was" here because Telegram made the decision to not display any distances below 100 meters since then. However, we'll soon find out that this is just a drop in the ocean, and that the accuracy we lose because of this change is easily regained.
 
-### Everything at our feet
+## Everything at our feet
 
 [Telegram's Android messenger](https://github.com/DrKLO/Telegram) is, like most of its core components, open source. This means that everyone can peek into the source code, copy it, edit it and create their own version of the Telegram app with whatever features they need. In Android, user interfaces and functionalities are organized into so-called activities. As such, the "People Nearby" feature finds itself in the [PeopleNearbyActivity](https://github.com/DrKLO/Telegram/blob/eb2bbd32c17fa7f50009404f73b8a6a630f31bfb/TMessagesProj/src/main/java/org/telegram/ui/PeopleNearbyActivity.java).
 
@@ -91,7 +91,7 @@ From now on, I'll be calling locations at which I recorded a user being less tha
 
 That's enough math for now. If you're curious about the exact implementation, you can always check the [repository](https://github.com/JoogsWasTaken/tg-nearby) for this project. It's time to get to the most exciting part of this journey.
 
-### Markers, circles and scary predictions
+## Markers, circles and scary predictions
 
 I sunk the most amount of time into creating a browser-based interface to navigate through the collected data. All locations where the Telegram app received a location update are plotted onto an interactive map. A small control panel in the top right allows for the selection of individual users, adjustment of parameters for the estimation of a user's actual location, and rendering options because drawing maps in the browser isn't exactly inexpensive. The following screenshots show the user interface in action, with a dataset that I accumulated on a Sunday afternoon walk. Note that all user handles are blacked out.
 
@@ -115,7 +115,7 @@ Without any numbers to go off just yet, it's pretty clear that simply observing 
 
 Now it looks pretty good but does it actually work? Is the presented information enough to find any user's location with reasonable accuracy? I got my roommate to help me figure this one out.
 
-### Numbers speak louder than words
+## Numbers speak louder than words
 
 It was my roommate's job to spoof his GPS location once more and make himself publicly visible. Then I went for another walk, imported the data, let my computer crunch the numbers and give an estimate on his whereabouts. We then compared my guess with his real location. The path I walked is similar to the one shown in the screenshots above, except I intentionally focused on trying to get as close to his faked location as possible. In the following image, the yellow marker represents the estimated location based on the data I collected. The blue marker was my roommate's actual location.
 
@@ -129,7 +129,7 @@ I was only able to do so for one user who verifiably had their last name as thei
 
 Regardless, it is difficult to verify the correctness of this method with people I don't personally know. I can interpret where the circles on the map overlap and then judge whether the yellow marker could be a reasonable guess or not. With my roommate, I could actually verify and measure just how close I was. And after having spent this much time with the "People Nearby" feature, I came to the conclusion that the data that Telegram provides about nearby users is more than enough to significantly reduce the area in which a person could be located.
 
-### Final thoughts
+## Final thoughts
 
 I collected data in a town that is not very densely populated and where not many active Telegram users live. My list of nearby users has been thoroughly manageable. Therefore, I can't make predictions on how well this method works in large towns with high population density. I assume that results may vary in a busy city with probably less accurate GPS results, but due to the state the world is in as of writing, I can't really put it to the test.
 
