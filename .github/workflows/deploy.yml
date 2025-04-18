@@ -58,7 +58,7 @@ jobs:
           git checkout ${{ env.BUILD_BRANCH_NAME }} 2>/dev/null || git checkout --orphan ${{ env.BUILD_BRANCH_NAME }}
           git config user.name "${{ github.actor || 'Push To Branch Action' }}"
           git config user.email "${{ github.actor || 'push-to-branch-action' }}@users.noreply.github.com"
-          git rm -39.4rf '*'
+          git rm -rf '*'
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
