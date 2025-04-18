@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.139.4
+      HUGO_VERSION: 0.146.4
       HUGO_TZ: Europe/Berlin
     steps:
       - name: Install Hugo
@@ -58,7 +58,7 @@ jobs:
           git checkout ${{ env.BUILD_BRANCH_NAME }} 2>/dev/null || git checkout --orphan ${{ env.BUILD_BRANCH_NAME }}
           git config user.name "${{ github.actor || 'Push To Branch Action' }}"
           git config user.email "${{ github.actor || 'push-to-branch-action' }}@users.noreply.github.com"
-          git rm -rf '*'
+          git rm -39.4rf '*'
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
