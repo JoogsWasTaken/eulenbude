@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Eulenbude</title><link>https://eulenbu.de/</link><description>Recent content on Eulenbude</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 21 Dec 2024 21:01:31 +0100</lastBuildDate><atom:link href="https://eulenbu.de/index.xml" rel="self" type="application/rss+xml"/><item><title>When an app breaks after ten years of service</title><link>https://eulenbu.de/posts/vpmobil-10-years/</link><pubDate>Sat, 21 Dec 2024 21:01:31 +0100</pubDate><guid>https://eulenbu.de/posts/vpmobil-10-years/</guid><description>&lt;p>It&amp;rsquo;s not often that I get e-mails that truly surprise me.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Eulenbude</title><link>https://eulenbu.de/</link><description>Recent content on Eulenbude</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 18 Apr 2025 13:29:29 +0200</lastBuildDate><atom:link href="https://eulenbu.de/index.xml" rel="self" type="application/rss+xml"/><item><title>Lessons from my first year as a voluntary tech lead</title><link>https://eulenbu.de/posts/les-first-year/</link><pubDate>Fri, 18 Apr 2025 13:29:29 +0200</pubDate><guid>https://eulenbu.de/posts/les-first-year/</guid><description>&lt;p>It&amp;rsquo;s now been a year since I took over the technical lead at Leipzig eSports (hereinafter: LES) &amp;mdash; a local club aiming to get people together under the banner of computer games and so much more.
+We&amp;rsquo;re now at well over 150 active members, thousands of followers on social media, some very cool brand collaborations and a strong presence at many events even beyond the borders of Leipzig.
+But as these things usually go, there is a lot of stuff behind the scenes that goes unnoticed by the public eye.&lt;/p></description></item><item><title>When an app breaks after ten years of service</title><link>https://eulenbu.de/posts/vpmobil-10-years/</link><pubDate>Sat, 21 Dec 2024 21:01:31 +0100</pubDate><guid>https://eulenbu.de/posts/vpmobil-10-years/</guid><description>&lt;p>It&amp;rsquo;s not often that I get e-mails that truly surprise me.
 A while back I received an e-mail from a teacher of the school I used to go to.
 He said that the web app that I programmed back then to present the school&amp;rsquo;s substitution plans suddenly stopped working and was asking for a password.
 Apparently the teachers installed a tablet in the staff room which had the app open at all times so they could stay up-to-date.
@@ -11,8 +13,7 @@ If you&amp;rsquo;re new to this series, then I highly recommend you read the fir
 &lt;li>&lt;a href="https://eulenbu.de/posts/bf-pprl-attacks/">You show me your bits, I show you who you are&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://eulenbu.de/posts/bf-popcnt/">How to count bits at the speed of light&lt;/a>&lt;/li>
 &lt;li>&lt;strong>&lt;a href="https://eulenbu.de/posts/bf-ncvr/">Becoming one in a million by giving up your data&lt;/a>&lt;/strong>&lt;/li>
-&lt;/ul>
-&lt;/blockquote>
+&lt;/ul>&lt;/blockquote>
 &lt;p>So far, all posts that dealt with niche aspects of my master thesis were all about the methods of privacy-preserving record linkage (PPRL), the attacks one can run on them and some interesting software engineering bits here and there.
 However I spent very little time covering what makes data linkable in the first place.&lt;/p></description></item><item><title>How to count bits at the speed of light</title><link>https://eulenbu.de/posts/bf-popcnt/</link><pubDate>Wed, 08 Feb 2023 21:46:14 +0100</pubDate><guid>https://eulenbu.de/posts/bf-popcnt/</guid><description>&lt;blockquote>
 &lt;p>This post is part of a series on Bloom filter based privacy-preserving record linkage.
@@ -22,8 +23,7 @@ If you&amp;rsquo;re new to this series, then I highly recommend you read the fir
 &lt;li>&lt;a href="https://eulenbu.de/posts/bf-pprl-attacks/">You show me your bits, I show you who you are&lt;/a>&lt;/li>
 &lt;li>&lt;strong>&lt;a href="https://eulenbu.de/posts/bf-popcnt/">How to count bits at the speed of light&lt;/a>&lt;/strong>&lt;/li>
 &lt;li>&lt;a href="https://eulenbu.de/posts/bf-ncvr/">Becoming one in a million by giving up your data&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/blockquote>
+&lt;/ul>&lt;/blockquote>
 &lt;p>I&amp;rsquo;ve been talking about Bloom filters a lot in my series about my master thesis.
 This time, I want to go one step deeper.
 Bloom filters operate on bitsets which, in turn, are represented as arrays of 64-bit unsigned integers&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> in memory.
@@ -37,8 +37,7 @@ If you&amp;rsquo;re new to this series, then I highly recommend you read the fir
 &lt;li>&lt;strong>&lt;a href="https://eulenbu.de/posts/bf-pprl-attacks/">You show me your bits, I show you who you are&lt;/a>&lt;/strong>&lt;/li>
 &lt;li>&lt;a href="https://eulenbu.de/posts/bf-popcnt/">How to count bits at the speed of light&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://eulenbu.de/posts/bf-ncvr/">Becoming one in a million by giving up your data&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/blockquote>
+&lt;/ul>&lt;/blockquote>
 &lt;p>&lt;a href="https://eulenbu.de/posts/bf-pprl-intro/">In my previous post in this series&lt;/a>, I gave an overview of how Bloom filters are applied in &lt;strong>privacy-preserving record linkage&lt;/strong>, or PPRL for short.
 Bloom filters obscure the data that is inserted into them while preserving the similarity between nearly identical data records.
 They do this by running input data through one or multiple hash functions.
@@ -52,8 +51,7 @@ If you&amp;rsquo;re new to this series, then I highly recommend you read this po
 &lt;li>&lt;a href="https://eulenbu.de/posts/bf-pprl-attacks/">You show me your bits, I show you who you are&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://eulenbu.de/posts/bf-popcnt/">How to count bits at the speed of light&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://eulenbu.de/posts/bf-ncvr/">Becoming one in a million by giving up your data&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/blockquote>
+&lt;/ul>&lt;/blockquote>
 &lt;p>Let&amp;rsquo;s consider the following scenario that is definitely not taken from any real-life events.
 A person is admitted to a hospital with a suspected flu.
 Upon closer inspection though, none of the symptoms seem to line up with known strains of influenza.
