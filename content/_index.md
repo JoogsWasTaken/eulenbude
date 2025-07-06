@@ -13,10 +13,13 @@ Welcome to my corner of the internet where I dump all my tech-related ramblings 
 
 ![Picture banner of me](banner.jpeg)
 
-My interests are many.
-For one, I love continuously learning about cybersecurity, as well as system and server administration.
-I volunteer at [Leipzig eSports e.V.](https://leipzigesports.de) and help them out with keeping all their infrastructure secure, maintainable and up to date.
-On my day job in medical informatics, I deploy applications that allow researchers to conduct studies on medical data while keeping patient information safe.
+I started working in medical informatics where I developed and deployed applications that allow resarchers to conduct studies on medical data.
+Keeping patient information safe was my top priority, which is why I also researched and implemented concepts on the bleeding edge of data privacy.
+
+Since then, I switched professions to help business clients move their services into Europe's soon-to-be biggest sovereign cloud environment.
+(I'm still getting started, so bear with me.)
+When I'm not doing that, I volunteer at [Leipzig eSports](https://leipzigesports.de).
+As their tech lead, I keep all of their services and servers up-to-date and develop their future IT strategy with the help of many other cool people.
 
 I also like games --- rhythm games to be precise.
 I like them so much in fact that I spent a decent amount of time lending my voice to commentate rhythm game tournaments, from small community-run ones to official world cups.
